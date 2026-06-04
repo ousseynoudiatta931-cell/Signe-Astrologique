@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zodiac Prestige Premium</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+font-family:Arial,sans-serif;
+min-height:100vh;
+background:linear-gradient(135deg,#050816,#130a2e,#1b103d);
+overflow-x:hidden;color:white;
+}
+.stars,.stars:after{
+position:fixed;inset:0;content:"";
+background-image:radial-gradient(#fff 1px,transparent 1px);
+background-size:50px 50px;
+opacity:.25;pointer-events:none;
+}
+.container{max-width:1100px;margin:auto;padding:40px 20px}
+.hero{text-align:center;padding:40px 0}
+.hero h1{
+font-size:3rem;
+background:linear-gradient(90deg,#ffd700,#fff2a8,#ffd700);
+-webkit-background-clip:text;color:transparent;
+}
+.glass{
+background:rgba(255,255,255,.08);
+backdrop-filter:blur(18px);
+border:1px solid rgba(255,255,255,.15);
+border-radius:28px;
+box-shadow:0 8px 40px rgba(0,0,0,.35);
+padding:25px;
+}
+input,button{
+width:100%;padding:14px;border-radius:14px;border:none;margin-top:10px
+}
+button{
+background:linear-gradient(90deg,#ffd700,#ffb700);
+font-weight:bold;cursor:pointer
+}
+button:hover{transform:translateY(-2px)}
+#result{display:none;margin-top:25px;animation:fade .7s}
+@keyframes fade{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+.sign{font-size:4rem;text-align:center}
+.name{text-align:center;font-size:2rem;color:#ffd700;margin:10px 0}
+.grid{
+display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:15px;margin-top:20px
+}
+.card{
+background:rgba(255,255,255,.06);
+padding:15px;border-radius:18px;
+transition:.3s
+}
+.card:hover{transform:translateY(-5px)}
+.card h3{color:#ffd700;margin-bottom:8px}
+.bar{height:16px;background:#222;border-radius:99px;overflow:hidden}
+.fill{height:100%;width:0;background:linear-gradient(90deg,#ffd700,#7c5cff)}
+</style>
+</head>
+<body>
+<div class="stars"></div>
+<div class="container">
+<div class="hero">
+<h1>Zodiac Prestige Premium</h1>
+<p>Découvrez votre profil astrologique</p>
+</div>
+
+<div class="glass">
+<label>Date de naissance</label>
+<input type="date" id="birthdate">
+<button onclick="findSign()">Découvrir mon signe</button>
+
+<div id="result">
+<div class="sign" id="icon"></div>
+<div class="name" id="sign"></div>
+
+<div class="grid">
+<div class="card"><h3>Élément</h3><p id="element"></p></div>
+<div class="card"><h3>Planète</h3><p id="planet"></p></div>
+<div class="card"><h3>Qualités</h3><p id="qualities"></p></div>
+<div class="card"><h3>Défauts</h3><p id="weaknesses"></p></div>
+<div class="card"><h3>Points faibles</h3><p id="flaws"></p></div>
+<div class="card"><h3>Compatibilité</h3><p id="compatibility"></p></div>
+<div class="card"><h3>Pierre</h3><p id="stone"></p></div>
+<div class="card"><h3>Couleur</h3><p id="color"></p></div>
+<div class="card"><h3>Citation</h3><p id="quote"></p></div>
+</div>
+
+<h3 style="margin-top:20px;color:#ffd700">Chance du jour</h3>
+<div class="bar"><div class="fill" id="luck"></div></div>
+</div>
+</div>
+</div>
+
+<script>
+const signs={
+"Capricorne":{icon:"♑",element:"Terre",planet:"Saturne",qualities:"Discipline, ambition, patience",weaknesses:"Rigidité, pessimisme",flaws:"Difficulté à lâcher prise",compatibility:"Taureau, Vierge",stone:"Onyx",color:"Noir",quote:"Le succès récompense la persévérance."},
+"Verseau":{icon:"♒",element:"Air",planet:"Uranus",qualities:"Originalité, innovation",weaknesses:"Détachement émotionnel",flaws:"Imprévisibilité",compatibility:"Balance, Gémeaux",stone:"Améthyste",color:"Bleu",quote:"Les idées changent le monde."},
+"Poissons":{icon:"♓",element:"Eau",planet:"Neptune",qualities:"Empathie, intuition",weaknesses:"Évasion, naïveté",flaws:"Indécision",compatibility:"Cancer, Scorpion",stone:"Aigue-marine",color:"Turquoise",quote:"L'intuition ouvre des portes invisibles."},
+"Bélier":{icon:"♈",element:"Feu",planet:"Mars",qualities:"Courage, énergie",weaknesses:"Impulsivité",flaws:"Impatience",compatibility:"Lion, Sagittaire",stone:"Rubis",color:"Rouge",quote:"Agir vaut mieux qu'hésiter."},
+"Taureau":{icon:"♉",element:"Terre",planet:"Vénus",qualities:"Fiabilité, stabilité",weaknesses:"Entêtement",flaws:"Résistance au changement",compatibility:"Vierge, Capricorne",stone:"Émeraude",color:"Vert",quote:"La constance construit les grandes choses."},
+"Gémeaux":{icon:"♊",element:"Air",planet:"Mercure",qualities:"Communication, curiosité",weaknesses:"Dispersion",flaws:"Inconstance",compatibility:"Balance, Verseau",stone:"Citrine",color:"Jaune",quote:"La connaissance est un voyage."},
+"Cancer":{icon:"♋",element:"Eau",planet:"Lune",qualities:"Protection, sensibilité",weaknesses:"Susceptibilité",flaws:"Attachement excessif",compatibility:"Poissons, Scorpion",stone:"Pierre de lune",color:"Argent",quote:"Le cœur est une force."},
+"Lion":{icon:"♌",element:"Feu",planet:"Soleil",qualities:"Charisme, créativité",weaknesses:"Orgueil",flaws:"Besoin d'attention",compatibility:"Bélier, Sagittaire",stone:"Œil de tigre",color:"Or",quote:"Brille sans éteindre les autres."},
+"Vierge":{icon:"♍",element:"Terre",planet:"Mercure",qualities:"Organisation, analyse",weaknesses:"Perfectionnisme",flaws:"Suranalyse",compatibility:"Taureau, Capricorne",stone:"Jaspe",color:"Beige",quote:"Les détails créent l'excellence."},
+"Balance":{icon:"♎",element:"Air",planet:"Vénus",qualities:"Diplomatie, harmonie",weaknesses:"Indécision",flaws:"Évitement des conflits",compatibility:"Gémeaux, Verseau",stone:"Quartz rose",color:"Rose",quote:"L'équilibre est une force."},
+"Scorpion":{icon:"♏",element:"Eau",planet:"Pluton",qualities:"Détermination, intensité",weaknesses:"Jalousie",flaws:"Rancune",compatibility:"Cancer, Poissons",stone:"Obsidienne",color:"Bordeaux",quote:"La transformation mène au pouvoir."},
+"Sagittaire":{icon:"♐",element:"Feu",planet:"Jupiter",qualities:"Optimisme, aventure",weaknesses:"Imprudence",flaws:"Manque de tact",compatibility:"Lion, Bélier",stone:"Topaze",color:"Violet",quote:"L'horizon est une invitation."}
+};
+
+function zodiac(m,d){
+if((m==12&&d>=22)||(m==1&&d<=19)) return "Capricorne";
+if((m==1&&d>=20)||(m==2&&d<=18)) return "Verseau";
+if((m==2&&d>=19)||(m==3&&d<=20)) return "Poissons";
+if((m==3&&d>=21)||(m==4&&d<=19)) return "Bélier";
+if((m==4&&d>=20)||(m==5&&d<=20)) return "Taureau";
+if((m==5&&d>=21)||(m==6&&d<=20)) return "Gémeaux";
+if((m==6&&d>=21)||(m==7&&d<=22)) return "Cancer";
+if((m==7&&d>=23)||(m==8&&d<=22)) return "Lion";
+if((m==8&&d>=23)||(m==9&&d<=22)) return "Vierge";
+if((m==9&&d>=23)||(m==10&&d<=22)) return "Balance";
+if((m==10&&d>=23)||(m==11&&d<=21)) return "Scorpion";
+return "Sagittaire";
+}
+
+function findSign(){
+let v=document.getElementById("birthdate").value;
+if(!v) return alert("Choisissez une date.");
+let dt=new Date(v);
+let sname=zodiac(dt.getMonth()+1,dt.getDate());
+let s=signs[sname];
+
+for(let k of ["element","planet","qualities","weaknesses","flaws","compatibility","stone","color","quote"])
+document.getElementById(k).textContent=s[k];
+
+document.getElementById("icon").textContent=s.icon;
+document.getElementById("sign").textContent=sname;
+document.getElementById("result").style.display="block";
+
+let luck=Math.floor(Math.random()*61)+40;
+document.getElementById("luck").style.width=luck+"%";
+}
+</script>
+</body>
+</html>
