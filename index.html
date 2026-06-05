@@ -3,146 +3,857 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Zodiac Prestige Premium</title>
+
+<!-- SEO -->
+<title>Cosmos Astral — Votre signe du zodiaque et profil astrologique</title>
+<meta name="description" content="Découvrez votre signe du zodiaque, vos traits de caractère, votre compatibilité astrologique et votre horoscope avec Cosmos Astral. Entrez votre date de naissance et révélez votre profil astral.">
+<meta name="keywords" content="astrologie, signe zodiaque, thème astral, horoscope, compatibilité astrologique, date de naissance, profil astral">
+<meta name="author" content="Cosmos Astral">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://cosmos-astral.netlify.app/">
+
+<!-- Open Graph -->
+<meta property="og:title" content="Cosmos Astral — Votre signe du zodiaque">
+<meta property="og:description" content="Entrez votre date de naissance et découvrez votre signe, vos traits, votre compatibilité et votre horoscope.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://cosmos-astral.netlify.app/">
+<meta property="og:locale" content="fr_FR">
+<meta property="og:site_name" content="Cosmos Astral">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Cosmos Astral — Votre signe du zodiaque">
+<meta name="twitter:description" content="Découvrez votre profil astrologique complet : traits, compatibilité et horoscope.">
+
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{
-font-family:Arial,sans-serif;
-min-height:100vh;
-background:linear-gradient(135deg,#050816,#130a2e,#1b103d);
-overflow-x:hidden;color:white;
+:root {
+  --ink:       #06040F;
+  --ink-mid:   #100C24;
+  --ink-soft:  #1A1435;
+  --violet:    #7B4FE0;
+  --violet-vif:#A06CF5;
+  --or:        #E8B84B;
+  --or-pale:   #F5D98A;
+  --or-dim:    #8A6A20;
+  --rose:      #E06B8A;
+  --cyan:      #5BCFCF;
+  --texte:     #EDE8F8;
+  --muted:     #8A82B0;
+  --border:    rgba(123,79,224,0.22);
+  --glow:      0 0 40px rgba(123,79,224,0.25);
 }
-.stars,.stars:after{
-position:fixed;inset:0;content:"";
-background-image:radial-gradient(#fff 1px,transparent 1px);
-background-size:50px 50px;
-opacity:.25;pointer-events:none;
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Outfit', sans-serif;
+  background: var(--ink);
+  color: var(--texte);
+  overflow-x: hidden;
+  cursor: default;
 }
-.container{max-width:1100px;margin:auto;padding:40px 20px}
-.hero{text-align:center;padding:40px 0}
-.hero h1{
-font-size:3rem;
-background:linear-gradient(90deg,#ffd700,#fff2a8,#ffd700);
--webkit-background-clip:text;color:transparent;
+
+#starCanvas {
+  position: fixed; inset: 0; z-index: 0;
+  pointer-events: none;
 }
-.glass{
-background:rgba(255,255,255,.08);
-backdrop-filter:blur(18px);
-border:1px solid rgba(255,255,255,.15);
-border-radius:28px;
-box-shadow:0 8px 40px rgba(0,0,0,.35);
-padding:25px;
+
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 clamp(1.5rem, 5vw, 4rem); height: 64px;
+  background: rgba(6,4,15,0.8);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
 }
-input,button{
-width:100%;padding:14px;border-radius:14px;border:none;margin-top:10px
+.nav-brand {
+  display: flex; align-items: center; gap: .7rem;
+  text-decoration: none; color: var(--texte);
 }
-button{
-background:linear-gradient(90deg,#ffd700,#ffb700);
-font-weight:bold;cursor:pointer
+.nav-orb {
+  width: 34px; height: 34px; border-radius: 50%;
+  background: conic-gradient(from 180deg, var(--violet), var(--or), var(--rose), var(--violet));
+  display: flex; align-items: center; justify-content: center;
+  font-size: .9rem;
+  box-shadow: 0 0 16px rgba(123,79,224,.5);
+  animation: orbSpin 8s linear infinite;
 }
-button:hover{transform:translateY(-2px)}
-#result{display:none;margin-top:25px;animation:fade .7s}
-@keyframes fade{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
-.sign{font-size:4rem;text-align:center}
-.name{text-align:center;font-size:2rem;color:#ffd700;margin:10px 0}
-.grid{
-display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-gap:15px;margin-top:20px
+@keyframes orbSpin { to { transform: rotate(360deg); } }
+.nav-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.25rem; font-weight: 600; letter-spacing: .06em;
 }
-.card{
-background:rgba(255,255,255,.06);
-padding:15px;border-radius:18px;
-transition:.3s
+.nav-title span { color: var(--or); font-style: italic; }
+.nav-links { display: flex; gap: 2rem; list-style: none; }
+.nav-links a { text-decoration: none; color: var(--muted); font-size: .8rem; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; transition: color .2s; }
+.nav-links a:hover { color: var(--or-pale); }
+
+.hero {
+  min-height: 100vh;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  text-align: center; padding: 80px 2rem 5rem;
+  position: relative; z-index: 1;
 }
-.card:hover{transform:translateY(-5px)}
-.card h3{color:#ffd700;margin-bottom:8px}
-.bar{height:16px;background:#222;border-radius:99px;overflow:hidden}
-.fill{height:100%;width:0;background:linear-gradient(90deg,#ffd700,#7c5cff)}
+
+.hero-eyebrow {
+  display: inline-flex; align-items: center; gap: .6rem;
+  font-size: .7rem; font-weight: 600; letter-spacing: .22em; text-transform: uppercase;
+  color: var(--or); margin-bottom: 2rem;
+  animation: fadeUp .8s ease both;
+}
+.hero-eyebrow::before, .hero-eyebrow::after {
+  content: '✦'; font-size: .6rem; opacity: .6;
+}
+
+.hero h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(3.5rem, 10vw, 8rem);
+  font-weight: 300; line-height: 1; letter-spacing: -.02em;
+  color: var(--texte);
+  animation: fadeUp .8s .1s ease both;
+}
+.hero h1 em {
+  font-style: italic; font-weight: 600;
+  background: linear-gradient(135deg, var(--or-pale) 0%, var(--or) 40%, var(--violet-vif) 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+
+.hero-sub {
+  max-width: 520px; margin: 1.8rem auto 3.5rem;
+  font-size: 1.05rem; font-weight: 300; color: var(--muted); line-height: 1.8;
+  animation: fadeUp .8s .2s ease both;
+}
+
+.form-card {
+  background: rgba(26,20,53,0.7);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: clamp(2rem, 5vw, 3.5rem);
+  width: 100%; max-width: 520px;
+  backdrop-filter: blur(20px);
+  box-shadow: var(--glow), inset 0 1px 0 rgba(255,255,255,.04);
+  animation: fadeUp .8s .3s ease both;
+  position: relative; overflow: hidden;
+}
+.form-card::before {
+  content: '';
+  position: absolute; top: -60px; left: 50%; transform: translateX(-50%);
+  width: 200px; height: 120px;
+  background: radial-gradient(ellipse, rgba(123,79,224,.3) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.form-label {
+  display: block;
+  font-size: .7rem; font-weight: 600; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: .8rem;
+}
+
+.date-inputs {
+  display: grid; grid-template-columns: 1fr 1fr 1fr; gap: .8rem; margin-bottom: 1.8rem;
+}
+.date-field { display: flex; flex-direction: column; gap: .4rem; }
+.date-field label { font-size: .65rem; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+.date-field select, .date-field input {
+  background: rgba(6,4,15,.6);
+  border: 1.5px solid rgba(123,79,224,.2);
+  border-radius: 10px;
+  color: var(--texte);
+  font-family: 'Outfit', sans-serif;
+  font-size: .95rem; font-weight: 400;
+  padding: .75rem 1rem;
+  outline: none;
+  transition: border-color .2s, box-shadow .2s;
+  width: 100%;
+  appearance: none; -webkit-appearance: none;
+  cursor: pointer;
+}
+.date-field select:focus, .date-field input:focus {
+  border-color: var(--violet-vif);
+  box-shadow: 0 0 0 3px rgba(123,79,224,.15);
+}
+.date-field select option { background: var(--ink-mid); }
+
+.btn-reveal {
+  width: 100%; padding: 1.1rem;
+  background: linear-gradient(135deg, var(--violet) 0%, var(--violet-vif) 50%, var(--or) 100%);
+  background-size: 200% 200%; background-position: 0% 50%;
+  border: none; border-radius: 12px;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.25rem; font-weight: 600; letter-spacing: .06em;
+  color: #fff; cursor: pointer;
+  transition: background-position .4s, transform .2s, box-shadow .2s;
+  box-shadow: 0 8px 32px rgba(123,79,224,.4);
+  position: relative; overflow: hidden;
+}
+.btn-reveal:hover {
+  background-position: 100% 50%;
+  transform: translateY(-2px);
+  box-shadow: 0 14px 40px rgba(123,79,224,.55);
+}
+.btn-reveal:active { transform: translateY(0); }
+
+.form-error {
+  display: none;
+  margin-top: 1rem;
+  padding: .75rem 1rem;
+  border-radius: 10px;
+  background: rgba(224,107,138,.1);
+  border: 1px solid rgba(224,107,138,.3);
+  color: var(--rose);
+  font-size: .85rem;
+  text-align: center;
+}
+.form-error.visible { display: block; }
+
+.scroll-hint {
+  position: absolute; bottom: 2.5rem; left: 50%; transform: translateX(-50%);
+  display: flex; flex-direction: column; align-items: center; gap: .5rem; z-index: 1;
+  animation: fadeUp .8s .6s ease both;
+}
+.scroll-hint span { font-size: .6rem; letter-spacing: .18em; text-transform: uppercase; color: var(--muted); }
+.scroll-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--or);
+  animation: scrollBounce 1.8s ease-in-out infinite;
+}
+@keyframes scrollBounce { 0%,100%{transform:translateY(0);opacity:.3;} 50%{transform:translateY(8px);opacity:1;} }
+
+#result { display: none; position: relative; z-index: 1; }
+
+.sign-banner {
+  min-height: 70vh; display: flex; align-items: center; justify-content: center;
+  padding: 5rem 2rem; text-align: center;
+  position: relative; overflow: hidden;
+}
+.sign-banner-bg {
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 80% 70% at 50% 50%, var(--sign-color-a, rgba(123,79,224,.3)) 0%, var(--sign-color-b, transparent) 60%);
+  transition: background 1s ease;
+}
+.sign-banner-inner { position: relative; z-index: 1; }
+
+.sign-glyph {
+  font-size: clamp(5rem, 15vw, 10rem); line-height: 1;
+  display: block; margin-bottom: 1rem;
+  filter: drop-shadow(0 0 30px var(--sign-glow, rgba(123,79,224,.5)));
+  animation: glyphFloat 4s ease-in-out infinite;
+}
+@keyframes glyphFloat { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-12px);} }
+
+.sign-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(3rem, 8vw, 6rem); font-weight: 700;
+  background: linear-gradient(135deg, var(--or-pale), var(--or));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  letter-spacing: -.02em;
+}
+.sign-dates {
+  font-size: .85rem; letter-spacing: .12em; color: var(--muted);
+  margin-top: .5rem; font-weight: 500; text-transform: uppercase;
+}
+.sign-birth {
+  font-size: .9rem; color: var(--muted);
+  margin-top: .6rem; font-weight: 400;
+}
+.sign-latin {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1rem; font-style: italic; color: var(--muted);
+  margin-top: .3rem; opacity: .7;
+}
+
+.sign-badges {
+  display: flex; gap: .8rem; justify-content: center; flex-wrap: wrap;
+  margin-top: 2rem;
+}
+.badge {
+  display: inline-flex; align-items: center; gap: .5rem;
+  padding: .45rem 1.1rem; border-radius: 99px;
+  font-size: .75rem; font-weight: 600; letter-spacing: .08em;
+  border: 1px solid; backdrop-filter: blur(10px);
+}
+.badge-feu   { color: #FF8A50; border-color: rgba(255,138,80,.3); background: rgba(255,138,80,.08); }
+.badge-terre { color: #7ECC7E; border-color: rgba(126,204,126,.3); background: rgba(126,204,126,.08); }
+.badge-air   { color: #91D4F5; border-color: rgba(145,212,245,.3); background: rgba(145,212,245,.08); }
+.badge-eau   { color: #7BBDF5; border-color: rgba(123,189,245,.3); background: rgba(123,189,245,.08); }
+.badge-planete { color: var(--or-pale); border-color: rgba(232,184,75,.3); background: rgba(232,184,75,.08); }
+.badge-mode { color: var(--violet-vif); border-color: rgba(160,108,245,.3); background: rgba(160,108,245,.08); }
+
+.info-sections {
+  max-width: 1100px; margin: 0 auto;
+  padding: 0 clamp(1.5rem, 5vw, 4rem) 6rem;
+  display: grid; gap: 2rem;
+}
+
+.info-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+.info-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 2rem; }
+
+.info-card {
+  background: rgba(26,20,53,0.6);
+  border: 1px solid var(--border);
+  border-radius: 16px; padding: 2rem;
+  backdrop-filter: blur(12px);
+  transition: transform .3s, box-shadow .3s, border-color .3s;
+  position: relative; overflow: hidden;
+}
+.info-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, transparent, var(--or), transparent);
+  opacity: 0; transition: opacity .3s;
+}
+.info-card:hover { transform: translateY(-4px); box-shadow: 0 16px 48px rgba(123,79,224,.15); border-color: rgba(123,79,224,.4); }
+.info-card:hover::before { opacity: 1; }
+
+.card-icon {
+  font-size: 1.8rem; margin-bottom: .8rem; display: block;
+  filter: drop-shadow(0 0 10px rgba(232,184,75,.3));
+}
+.card-title {
+  font-size: .65rem; font-weight: 700; letter-spacing: .18em; text-transform: uppercase;
+  color: var(--or); margin-bottom: 1rem;
+  display: flex; align-items: center; gap: .5rem;
+}
+.card-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+.card-desc {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.05rem; font-weight: 300; line-height: 1.85; color: rgba(237,232,248,.8);
+}
+
+.traits-list { display: flex; flex-wrap: wrap; gap: .5rem; }
+.trait {
+  padding: .35rem .9rem; border-radius: 99px;
+  font-size: .78rem; font-weight: 500;
+  background: rgba(123,79,224,.12);
+  border: 1px solid rgba(123,79,224,.2);
+  color: var(--violet-vif);
+  transition: background .2s;
+}
+.trait.negatif {
+  background: rgba(224,107,138,.08);
+  border-color: rgba(224,107,138,.2);
+  color: var(--rose);
+}
+
+.quality-row { display: flex; align-items: center; gap: 1rem; margin-bottom: .9rem; }
+.quality-row:last-child { margin-bottom: 0; }
+.quality-label { font-size: .82rem; color: var(--muted); width: 110px; flex-shrink: 0; }
+.quality-bar { flex: 1; height: 6px; background: rgba(255,255,255,.06); border-radius: 99px; overflow: hidden; }
+.quality-fill {
+  height: 100%; border-radius: 99px;
+  background: linear-gradient(90deg, var(--violet), var(--or));
+  transform-origin: left;
+  transform: scaleX(0);
+  transition: transform 1.2s cubic-bezier(.4,0,.2,1);
+}
+
+.compat-list { display: flex; flex-wrap: wrap; gap: .5rem; }
+.compat-item {
+  display: flex; flex-direction: column; align-items: center; gap: .3rem;
+  padding: .6rem .9rem; border-radius: 12px;
+  background: rgba(6,4,15,.4); border: 1px solid var(--border);
+  font-size: .7rem; color: var(--muted); transition: all .2s;
+  cursor: default;
+}
+.compat-item:hover { border-color: var(--or); color: var(--or-pale); }
+.compat-glyph { font-size: 1.4rem; }
+.compat-item.best { border-color: rgba(232,184,75,.4); background: rgba(232,184,75,.06); }
+.compat-item.best .compat-glyph { filter: drop-shadow(0 0 6px rgba(232,184,75,.5)); }
+
+.lucky-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.lucky-item { background: rgba(6,4,15,.3); border-radius: 10px; padding: .9rem 1rem; border: 1px solid var(--border); }
+.lucky-key { font-size: .62rem; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin-bottom: .4rem; }
+.lucky-val { font-family: 'Cormorant Garamond', serif; font-size: 1.05rem; font-weight: 600; color: var(--or-pale); }
+
+.horoscope-card {
+  background: linear-gradient(135deg, rgba(26,20,53,.9) 0%, rgba(16,12,36,.9) 100%);
+  border: 1px solid rgba(232,184,75,.2);
+  border-radius: 16px; padding: 2.5rem;
+  position: relative; overflow: hidden;
+}
+.horoscope-card::before {
+  content: '✦';
+  position: absolute; top: 1.5rem; right: 2rem;
+  font-size: 4rem; color: rgba(232,184,75,.06);
+  font-family: serif;
+}
+.horoscope-text {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.15rem; font-weight: 300; line-height: 2;
+  color: rgba(237,232,248,.85);
+  font-style: italic;
+}
+.horoscope-domains {
+  display: grid; grid-template-columns: repeat(3,1fr); gap: 1rem; margin-top: 2rem;
+}
+.domain {
+  text-align: center; padding: 1.2rem .8rem;
+  background: rgba(6,4,15,.4); border-radius: 12px;
+  border: 1px solid var(--border);
+}
+.domain-icon { font-size: 1.5rem; display: block; margin-bottom: .5rem; }
+.domain-label { font-size: .65rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.domain-score { font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; font-weight: 700; color: var(--or); }
+
+.back-section {
+  text-align: center; padding: 3rem 2rem;
+  border-top: 1px solid var(--border);
+  position: relative; z-index: 1;
+}
+.btn-back {
+  display: inline-flex; align-items: center; gap: .6rem;
+  padding: .9rem 2.5rem; border-radius: 99px;
+  background: transparent; color: var(--muted);
+  border: 1.5px solid var(--border); font-family: inherit;
+  font-size: .85rem; font-weight: 500; cursor: pointer;
+  transition: all .2s; text-decoration: none;
+}
+.btn-back:hover { border-color: var(--or); color: var(--or-pale); background: rgba(232,184,75,.06); }
+
+footer {
+  background: rgba(6,4,15,.9); border-top: 1px solid var(--border);
+  padding: 3rem clamp(2rem,5vw,5rem) 2rem;
+  position: relative; z-index: 1;
+  text-align: center;
+}
+.footer-brand {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.5rem; font-weight: 600; color: var(--or);
+  margin-bottom: .5rem;
+}
+.footer-desc { font-size: .8rem; color: var(--muted); line-height: 1.6; max-width: 400px; margin: 0 auto 2rem; }
+.footer-signs { display: flex; justify-content: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 2rem; }
+.footer-sign {
+  font-size: 1.4rem; cursor: pointer; transition: transform .2s, filter .2s;
+  background: none; border: none; color: inherit; padding: .25rem;
+}
+.footer-sign:hover { transform: scale(1.3); filter: drop-shadow(0 0 8px var(--or)); }
+
+.zodiac-card {
+  background: rgba(26,20,53,.6);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 1.4rem;
+  text-align: center;
+  cursor: pointer;
+  transition: transform .25s, box-shadow .25s, border-color .25s;
+  font-family: inherit;
+  color: inherit;
+  width: 100%;
+}
+.zodiac-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(232,184,75,.4);
+  box-shadow: 0 12px 32px rgba(123,79,224,.2);
+}
+.zodiac-card-glyph { font-size: 2rem; margin-bottom: .5rem; display: block; }
+.zodiac-card-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1rem; font-weight: 600; color: var(--or-pale);
+}
+.zodiac-card-dates {
+  font-size: .65rem; color: var(--muted); margin-top: .3rem; letter-spacing: .05em;
+}
+
+.signes-header { text-align: center; margin-bottom: 3.5rem; }
+.signes-eyebrow {
+  font-size: .7rem; letter-spacing: .2em; text-transform: uppercase;
+  color: var(--or); font-weight: 600; margin-bottom: .8rem;
+}
+.signes-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2rem, 4vw, 3rem); font-weight: 300; color: var(--texte);
+}
+.signes-title em { font-style: italic; color: var(--or-pale); }
+
+#zodiacWheel {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 1rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.footer-bottom { font-size: .72rem; color: rgba(138,130,176,.4); }
+
+.divider {
+  display: flex; align-items: center; gap: 1.5rem;
+  max-width: 1100px; margin: 0 auto;
+  padding: 0 clamp(1.5rem,5vw,4rem);
+  color: var(--or-dim); font-size: .7rem; letter-spacing: .2em;
+}
+.divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, transparent, var(--border), transparent); }
+
+@keyframes fadeUp { from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:translateY(0);} }
+.fade-in-up { animation: fadeUp .6s ease both; }
+
+@media (max-width:768px) {
+  .info-grid-2, .info-grid-3 { grid-template-columns: 1fr; }
+  .horoscope-domains { grid-template-columns: 1fr 1fr; }
+  .nav-links { display: none; }
+  .lucky-grid { grid-template-columns: 1fr; }
+  .date-inputs { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width:420px) {
+  .date-inputs { grid-template-columns: 1fr; }
+}
 </style>
 </head>
 <body>
-<div class="stars"></div>
-<div class="container">
-<div class="hero">
-<h1>Zodiac Prestige Premium</h1>
-<p>Découvrez votre profil astrologique</p>
+
+<canvas id="starCanvas" aria-hidden="true"></canvas>
+
+<nav>
+  <a class="nav-brand" href="#" onclick="showHome(); return false;" aria-label="Cosmos Astral — Accueil">
+    <div class="nav-orb" aria-hidden="true">✦</div>
+    <span class="nav-title">Cosmos <span>Astral</span></span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#" onclick="showHome(); return false;">Accueil</a></li>
+    <li><a href="#signes">Les 12 Signes</a></li>
+    <li><a href="#footer">À propos</a></li>
+  </ul>
+</nav>
+
+<main id="home-page">
+  <section class="hero">
+    <p class="hero-eyebrow">Astrologie occidentale</p>
+    <h1>Lisez dans<br><em>les étoiles</em></h1>
+    <p class="hero-sub">Entrez votre date de naissance et découvrez votre signe du zodiaque, vos traits de caractère, votre compatibilité et bien plus encore.</p>
+
+    <div class="form-card">
+      <label class="form-label" for="selectDay">Votre date de naissance</label>
+      <div class="date-inputs">
+        <div class="date-field">
+          <label for="selectDay">Jour</label>
+          <select id="selectDay" aria-label="Jour de naissance"></select>
+        </div>
+        <div class="date-field">
+          <label for="selectMonth">Mois</label>
+          <select id="selectMonth" aria-label="Mois de naissance"></select>
+        </div>
+        <div class="date-field">
+          <label for="inputYear">Année</label>
+          <input type="number" id="inputYear" min="1900" max="2026" placeholder="1990" aria-label="Année de naissance">
+        </div>
+      </div>
+      <button class="btn-reveal" type="button" onclick="revealSign()">
+        ✦ Révéler mon profil astral
+      </button>
+      <p class="form-error" id="formError" role="alert"></p>
+    </div>
+
+    <div class="scroll-hint" aria-hidden="true">
+      <div class="scroll-dot"></div>
+      <span>Défiler</span>
+    </div>
+  </section>
+
+  <section id="signes" style="padding: 6rem clamp(1.5rem,5vw,4rem); position:relative; z-index:1;">
+    <div class="signes-header">
+      <p class="signes-eyebrow">✦ Les douze signes ✦</p>
+      <h2 class="signes-title">La roue du <em>zodiaque</em></h2>
+    </div>
+    <div id="zodiacWheel"></div>
+  </section>
+</main>
+
+<div id="result" role="region" aria-label="Résultat de votre profil astral">
+  <div class="sign-banner" id="signBanner">
+    <div class="sign-banner-bg" id="signBannerBg"></div>
+    <div class="sign-banner-inner">
+      <span class="sign-glyph" id="signGlyph" aria-hidden="true"></span>
+      <div class="sign-name" id="signName"></div>
+      <div class="sign-dates" id="signDates"></div>
+      <div class="sign-birth" id="signBirth"></div>
+      <div class="sign-latin" id="signLatin"></div>
+      <div class="sign-badges" id="signBadges"></div>
+    </div>
+  </div>
+
+  <div class="divider">✦ VOTRE PROFIL ASTRAL ✦</div>
+
+  <div class="info-sections">
+    <div class="info-card fade-in-up">
+      <span class="card-icon" aria-hidden="true">🌌</span>
+      <div class="card-title">Portrait Astral</div>
+      <p class="card-desc" id="signDesc"></p>
+    </div>
+
+    <div class="info-grid-2">
+      <div class="info-card fade-in-up">
+        <span class="card-icon" aria-hidden="true">✨</span>
+        <div class="card-title">Points Forts</div>
+        <div class="traits-list" id="traitPos"></div>
+      </div>
+      <div class="info-card fade-in-up">
+        <span class="card-icon" aria-hidden="true">🌑</span>
+        <div class="card-title">Points à Travailler</div>
+        <div class="traits-list" id="traitNeg"></div>
+      </div>
+    </div>
+
+    <div class="info-card fade-in-up">
+      <span class="card-icon" aria-hidden="true">📊</span>
+      <div class="card-title">Profil de Personnalité</div>
+      <div id="qualityBars"></div>
+    </div>
+
+    <div class="info-grid-2">
+      <div class="info-card fade-in-up">
+        <span class="card-icon" aria-hidden="true">🍀</span>
+        <div class="card-title">Éléments Chanceux</div>
+        <div class="lucky-grid" id="luckyGrid"></div>
+      </div>
+      <div class="info-card fade-in-up">
+        <span class="card-icon" aria-hidden="true">💫</span>
+        <div class="card-title">Compatibilité</div>
+        <p style="font-size:.8rem;color:var(--muted);margin-bottom:1rem;" id="compatDesc"></p>
+        <div class="compat-list" id="compatList"></div>
+      </div>
+    </div>
+
+    <div class="horoscope-card fade-in-up">
+      <div class="card-title">✦ Message des Étoiles</div>
+      <p class="horoscope-text" id="horoscopeText"></p>
+      <div class="horoscope-domains" id="horoscopeDomains"></div>
+    </div>
+
+    <div class="info-card fade-in-up">
+      <span class="card-icon" aria-hidden="true">👑</span>
+      <div class="card-title">Célébrités du même signe</div>
+      <div id="celebList" style="display:flex;flex-wrap:wrap;gap:.6rem;"></div>
+    </div>
+  </div>
+
+  <div class="back-section">
+    <button class="btn-back" type="button" onclick="showHome()">← Recommencer</button>
+  </div>
 </div>
 
-<div class="glass">
-<label>Date de naissance</label>
-<input type="date" id="birthdate">
-<button onclick="findSign()">Découvrir mon signe</button>
-
-<div id="result">
-<div class="sign" id="icon"></div>
-<div class="name" id="sign"></div>
-
-<div class="grid">
-<div class="card"><h3>Élément</h3><p id="element"></p></div>
-<div class="card"><h3>Planète</h3><p id="planet"></p></div>
-<div class="card"><h3>Qualités</h3><p id="qualities"></p></div>
-<div class="card"><h3>Défauts</h3><p id="weaknesses"></p></div>
-<div class="card"><h3>Points faibles</h3><p id="flaws"></p></div>
-<div class="card"><h3>Compatibilité</h3><p id="compatibility"></p></div>
-<div class="card"><h3>Pierre</h3><p id="stone"></p></div>
-<div class="card"><h3>Couleur</h3><p id="color"></p></div>
-<div class="card"><h3>Citation</h3><p id="quote"></p></div>
-</div>
-
-<h3 style="margin-top:20px;color:#ffd700">Chance du jour</h3>
-<div class="bar"><div class="fill" id="luck"></div></div>
-</div>
-</div>
-</div>
+<footer id="footer">
+  <div class="footer-brand">✦ Cosmos Astral</div>
+  <p class="footer-desc">Un voyage au cœur du zodiaque occidental. Découvrez ce que les astres révèlent sur votre personnalité, vos relations et votre destin.</p>
+  <div class="footer-signs" id="footerSigns"></div>
+  <div class="footer-bottom">© 2026 Cosmos Astral · Astrologie à titre informatif et divertissant</div>
+</footer>
 
 <script>
-const signs={
-"Capricorne":{icon:"♑",element:"Terre",planet:"Saturne",qualities:"Discipline, ambition, patience",weaknesses:"Rigidité, pessimisme",flaws:"Difficulté à lâcher prise",compatibility:"Taureau, Vierge",stone:"Onyx",color:"Noir",quote:"Le succès récompense la persévérance."},
-"Verseau":{icon:"♒",element:"Air",planet:"Uranus",qualities:"Originalité, innovation",weaknesses:"Détachement émotionnel",flaws:"Imprévisibilité",compatibility:"Balance, Gémeaux",stone:"Améthyste",color:"Bleu",quote:"Les idées changent le monde."},
-"Poissons":{icon:"♓",element:"Eau",planet:"Neptune",qualities:"Empathie, intuition",weaknesses:"Évasion, naïveté",flaws:"Indécision",compatibility:"Cancer, Scorpion",stone:"Aigue-marine",color:"Turquoise",quote:"L'intuition ouvre des portes invisibles."},
-"Bélier":{icon:"♈",element:"Feu",planet:"Mars",qualities:"Courage, énergie",weaknesses:"Impulsivité",flaws:"Impatience",compatibility:"Lion, Sagittaire",stone:"Rubis",color:"Rouge",quote:"Agir vaut mieux qu'hésiter."},
-"Taureau":{icon:"♉",element:"Terre",planet:"Vénus",qualities:"Fiabilité, stabilité",weaknesses:"Entêtement",flaws:"Résistance au changement",compatibility:"Vierge, Capricorne",stone:"Émeraude",color:"Vert",quote:"La constance construit les grandes choses."},
-"Gémeaux":{icon:"♊",element:"Air",planet:"Mercure",qualities:"Communication, curiosité",weaknesses:"Dispersion",flaws:"Inconstance",compatibility:"Balance, Verseau",stone:"Citrine",color:"Jaune",quote:"La connaissance est un voyage."},
-"Cancer":{icon:"♋",element:"Eau",planet:"Lune",qualities:"Protection, sensibilité",weaknesses:"Susceptibilité",flaws:"Attachement excessif",compatibility:"Poissons, Scorpion",stone:"Pierre de lune",color:"Argent",quote:"Le cœur est une force."},
-"Lion":{icon:"♌",element:"Feu",planet:"Soleil",qualities:"Charisme, créativité",weaknesses:"Orgueil",flaws:"Besoin d'attention",compatibility:"Bélier, Sagittaire",stone:"Œil de tigre",color:"Or",quote:"Brille sans éteindre les autres."},
-"Vierge":{icon:"♍",element:"Terre",planet:"Mercure",qualities:"Organisation, analyse",weaknesses:"Perfectionnisme",flaws:"Suranalyse",compatibility:"Taureau, Capricorne",stone:"Jaspe",color:"Beige",quote:"Les détails créent l'excellence."},
-"Balance":{icon:"♎",element:"Air",planet:"Vénus",qualities:"Diplomatie, harmonie",weaknesses:"Indécision",flaws:"Évitement des conflits",compatibility:"Gémeaux, Verseau",stone:"Quartz rose",color:"Rose",quote:"L'équilibre est une force."},
-"Scorpion":{icon:"♏",element:"Eau",planet:"Pluton",qualities:"Détermination, intensité",weaknesses:"Jalousie",flaws:"Rancune",compatibility:"Cancer, Poissons",stone:"Obsidienne",color:"Bordeaux",quote:"La transformation mène au pouvoir."},
-"Sagittaire":{icon:"♐",element:"Feu",planet:"Jupiter",qualities:"Optimisme, aventure",weaknesses:"Imprudence",flaws:"Manque de tact",compatibility:"Lion, Bélier",stone:"Topaze",color:"Violet",quote:"L'horizon est une invitation."}
-};
+(function initStars() {
+  const canvas = document.getElementById('starCanvas');
+  const ctx = canvas.getContext('2d');
+  let stars = [];
+  let animId;
 
-function zodiac(m,d){
-if((m==12&&d>=22)||(m==1&&d<=19)) return "Capricorne";
-if((m==1&&d>=20)||(m==2&&d<=18)) return "Verseau";
-if((m==2&&d>=19)||(m==3&&d<=20)) return "Poissons";
-if((m==3&&d>=21)||(m==4&&d<=19)) return "Bélier";
-if((m==4&&d>=20)||(m==5&&d<=20)) return "Taureau";
-if((m==5&&d>=21)||(m==6&&d<=20)) return "Gémeaux";
-if((m==6&&d>=21)||(m==7&&d<=22)) return "Cancer";
-if((m==7&&d>=23)||(m==8&&d<=22)) return "Lion";
-if((m==8&&d>=23)||(m==9&&d<=22)) return "Vierge";
-if((m==9&&d>=23)||(m==10&&d<=22)) return "Balance";
-if((m==10&&d>=23)||(m==11&&d<=21)) return "Scorpion";
-return "Sagittaire";
+  function resize() {
+    canvas.width  = window.innerWidth;
+    canvas.height = window.innerHeight;
+    stars = Array.from({length: 200}, () => ({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      r: Math.random() * 1.5 + 0.3,
+      a: Math.random(),
+      speed: Math.random() * 0.008 + 0.003,
+      phase: Math.random() * Math.PI * 2,
+    }));
+  }
+
+  function draw(t) {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    stars.forEach(s => {
+      s.a = 0.3 + 0.7 * (0.5 + 0.5 * Math.sin(t * s.speed + s.phase));
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(232,216,255,${s.a})`;
+      ctx.fill();
+    });
+    animId = requestAnimationFrame(draw);
+  }
+
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) cancelAnimationFrame(animId);
+    else requestAnimationFrame(draw);
+  });
+
+  window.addEventListener('resize', resize);
+  resize();
+  requestAnimationFrame(draw);
+})();
+
+const SIGNES = [
+  { nom: "Bélier", latin: "Aries", glyph: "♈", debut: [3,21], fin: [4,19], element: "Feu", mode: "Cardinal", planete: "Mars", couleurA: "rgba(220,50,50,.35)", couleurB: "transparent", glow: "rgba(220,60,60,.5)", desc: "Premier signe du zodiaque, le Bélier incarne l'énergie primordiale du printemps. Né sous la protection de Mars, dieu de la guerre, vous êtes doté d'une audace naturelle et d'un instinct de pionnier qui vous pousse à ouvrir les chemins là où d'autres hésitent. Votre feu intérieur est communicatif, votre enthousiasme contagieux, et votre capacité à agir sans délai en fait des leaders redoutables.", positifs: ["Courageux","Entreprenant","Énergique","Direct","Passionné","Pionnier","Loyal","Spontané"], negatifs: ["Impatient","Impulsif","Agressif","Égotiste","Tête brûlée"], qualites: [{l:"Confiance",v:.88},{l:"Énergie",v:.95},{l:"Leadership",v:.82},{l:"Créativité",v:.70},{l:"Empathie",v:.55},{l:"Patience",v:.35}], chanceux: {chiffres:"1, 8, 17", couleurs:"Rouge, Orange, Blanc", pierre:"Diamant, Rubis", jour:"Mardi", fleur:"Chardon, Coquelicot"}, compat: ["Lion","Sagittaire","Gémeaux","Verseau"], compatBest: ["Lion","Sagittaire"], compatDesc: "Affinités naturelles avec les signes de Feu. Relation intense avec la Balance.", horoscope: "Les astres vous invitent à canaliser votre énergie débordante vers des projets qui vous tiennent vraiment à cœur. Mars, votre planète maîtresse, renforce votre détermination — c'est le moment idéal pour prendre des initiatives audacieuses. En amour, votre sincérité désarmante crée des connexions profondes et durables. Financièrement, faites confiance à votre instinct mais prenez le temps de la réflexion avant de signer.", domaines: [{i:"❤️",l:"Amour",s:"85"},{i:"💼",l:"Carrière",s:"90"},{i:"🌿",l:"Santé",s:"78"}], celebs: ["Lady Gaga","Charlie Chaplin","Mariah Carey","Vincent van Gogh","Celine Dion","Pharrell Williams"] },
+  { nom: "Taureau", latin: "Taurus", glyph: "♉", debut: [4,20], fin: [5,20], element: "Terre", mode: "Fixe", planete: "Vénus", couleurA: "rgba(80,160,80,.3)", couleurB: "transparent", glow: "rgba(80,160,80,.4)", desc: "Gouverné par Vénus, planète de la beauté et de l'amour, le Taureau possède un sens esthétique raffiné et un appétit pour les plaisirs sensoriels de la vie. Vous appréciez ce qui est solide, beau, et durable. Votre ténacité est légendaire — lorsque vous vous fixez un objectif, vous déployez une patience et une constance qui finissent toujours par triompher. Vous êtes le roc sur lequel les autres s'appuient.", positifs: ["Fiable","Patient","Déterminé","Sensuel","Pratique","Loyal","Généreux","Stable"], negatifs: ["Têtu","Possessif","Matérialiste","Résistant au changement","Lent"], qualites: [{l:"Fiabilité",v:.95},{l:"Patience",v:.90},{l:"Créativité",v:.75},{l:"Sensualité",v:.88},{l:"Flexibilité",v:.30},{l:"Impulsivité",v:.20}], chanceux: {chiffres:"2, 6, 9", couleurs:"Vert, Rose, Blanc", pierre:"Émeraude, Saphir rose", jour:"Vendredi", fleur:"Rose, Violette"}, compat: ["Vierge","Capricorne","Cancer","Poissons"], compatBest: ["Vierge","Capricorne"], compatDesc: "Harmonie profonde avec la Terre et l'Eau. Polarité magnétique avec le Scorpion.", horoscope: "Vénus illumine votre secteur de la prospérité et des relations affectives. Ce cycle favorise les investissements à long terme, tant en amour qu'en finances. Votre sens pratique vous guide naturellement vers des décisions solides. La nature et les arts vous ressourcent profondément — accordez-vous du temps pour la beauté. Un soin particulier apporté à votre espace de vie transformera votre quotidien.", domaines: [{i:"❤️",l:"Amour",s:"88"},{i:"💼",l:"Carrière",s:"82"},{i:"🌿",l:"Santé",s:"85"}], celebs: ["Adele","Shakespeare","Audrey Hepburn","David Beckham","Dwayne Johnson","Rihanna"] },
+  { nom: "Gémeaux", latin: "Gemini", glyph: "♊", debut: [5,21], fin: [6,20], element: "Air", mode: "Mutable", planete: "Mercure", couleurA: "rgba(80,180,220,.3)", couleurB: "transparent", glow: "rgba(80,180,220,.45)", desc: "Sous la gouverne de Mercure, messager des dieux, les Gémeaux sont dotés d'une intelligence vive, d'une curiosité insatiable et d'un don naturel pour la communication. Votre esprit agile passe d'un sujet à l'autre avec une fluidité déconcertante pour les autres signes. Vous êtes l'éternel étudiant du zodiaque, toujours à la recherche de nouvelles idées, connexions et expériences qui nourrissent votre soif de diversité.", positifs: ["Curieux","Adaptable","Éloquent","Esprit vif","Sociable","Inventif","Polyvalent","Drôle"], negatifs: ["Inconstant","Superficiel","Indécis","Nerveux","Dissipé"], qualites: [{l:"Intelligence",v:.95},{l:"Communication",v:.92},{l:"Adaptabilité",v:.88},{l:"Créativité",v:.85},{l:"Constance",v:.40},{l:"Profondeur",v:.55}], chanceux: {chiffres:"3, 7, 12", couleurs:"Jaune, Bleu ciel, Vert", pierre:"Agate, Citrine", jour:"Mercredi", fleur:"Lavande, Muguet"}, compat: ["Balance","Verseau","Bélier","Lion"], compatBest: ["Balance","Verseau"], compatDesc: "Affinités brillantes avec l'Air. Curiosité mutuelle avec le Sagittaire.", horoscope: "Mercure en transit dynamise votre communication et ouvre des portes inattendues. C'est une période propice aux apprentissages, aux voyages courts et aux nouvelles rencontres intellectuellement stimulantes. Votre pouvoir de persuasion est à son apogée — profitez-en pour présenter vos idées. En amour, votre légèreté charmante attire, mais un peu plus de profondeur fidélisera.", domaines: [{i:"❤️",l:"Amour",s:"75"},{i:"💼",l:"Carrière",s:"88"},{i:"🌿",l:"Santé",s:"72"}], celebs: ["Marilyn Monroe","Kanye West","Angelina Jolie","Johnny Depp","Tupac","Bob Dylan"] },
+  { nom: "Cancer", latin: "Cancer", glyph: "♋", debut: [6,21], fin: [7,22], element: "Eau", mode: "Cardinal", planete: "Lune", couleurA: "rgba(100,140,220,.3)", couleurB: "transparent", glow: "rgba(100,140,220,.45)", desc: "Gouverné par la Lune changeante, le Cancer est le signe le plus intuitif et émotionnellement profond du zodiaque. Vous portez en vous un monde intérieur d'une richesse extraordinaire. Votre empathie naturelle fait de vous un confident et un protecteur hors pair — vous ressentez les émotions des autres avant même qu'elles ne soient exprimées. Le foyer, la famille et les racines constituent votre univers sacré.", positifs: ["Intuitif","Empathique","Loyal","Protecteur","Imaginatif","Attentionné","Tenace","Mémoriel"], negatifs: ["Lunatique","Susceptible","Possessif","Renfermé","Anxieux"], qualites: [{l:"Empathie",v:.96},{l:"Intuition",v:.92},{l:"Loyauté",v:.90},{l:"Créativité",v:.82},{l:"Confiance",v:.55},{l:"Objectivité",v:.48}], chanceux: {chiffres:"2, 7, 11", couleurs:"Blanc, Argent, Crème", pierre:"Moonstone, Perle", jour:"Lundi", fleur:"Lys blanc, Jasmin"}, compat: ["Scorpion","Poissons","Taureau","Vierge"], compatBest: ["Scorpion","Poissons"], compatDesc: "Profonde résonance avec l'Eau et la Terre. Polarité complémentaire avec le Capricorne.", horoscope: "La Lune, votre astre tutélaire, traverse un cycle de renouveau émotionnel. C'est le moment de faire le tri dans vos relations et de vous entourer uniquement de ceux qui vous nourrissent vraiment. Votre intuition est particulièrement aiguisée — faites confiance à vos ressentis. Un projet créatif lié à votre espace de vie ou à votre famille vous apportera beaucoup de satisfaction.", domaines: [{i:"❤️",l:"Amour",s:"92"},{i:"💼",l:"Carrière",s:"72"},{i:"🌿",l:"Santé",s:"80"}], celebs: ["Ariana Grande","Tom Hanks","Princess Diana","Selena Gomez","Elon Musk","Lana Del Rey"] },
+  { nom: "Lion", latin: "Leo", glyph: "♌", debut: [7,23], fin: [8,22], element: "Feu", mode: "Fixe", planete: "Soleil", couleurA: "rgba(240,180,40,.35)", couleurB: "transparent", glow: "rgba(240,180,40,.5)", desc: "Signe royal gouverné par le Soleil lui-même, le Lion rayonne d'une présence magnétique qui illumine chaque pièce qu'il traverse. Vous êtes né pour briller, pour inspirer et pour diriger avec générosité. Votre cœur est grand comme votre ambition, et votre générosité n'a d'égal que votre orgueil bien justifié. Vous portez naturellement la couronne de la créativité et du leadership charismatique.", positifs: ["Charismatique","Généreux","Créatif","Loyal","Courageux","Chaleureux","Enthousiaste","Protecteur"], negatifs: ["Orgueilleux","Dominateur","Vaniteux","Inflexible","Dramatique"], qualites: [{l:"Charisme",v:.96},{l:"Générosité",v:.88},{l:"Leadership",v:.92},{l:"Créativité",v:.90},{l:"Humilité",v:.38},{l:"Patience",v:.55}], chanceux: {chiffres:"1, 4, 10", couleurs:"Or, Orange, Rouge", pierre:"Onyx doré, Topaze", jour:"Dimanche", fleur:"Tournesol, Dahlia"}, compat: ["Bélier","Sagittaire","Gémeaux","Balance"], compatBest: ["Bélier","Sagittaire"], compatDesc: "Feu contre Feu : une complicité explosive. Belle complémentarité avec le Verseau.", horoscope: "Le Soleil, votre planète maîtresse, vous enveloppe d'une lumière particulière en ce moment. Votre magnétisme naturel est amplifié — les opportunités professionnelles et amoureuses se présentent d'elles-mêmes. Acceptez les éloges avec grâce et répondez-y par encore plus de générosité. Un projet créatif qui vous passionne mérite enfin toute votre attention. Votre heure de gloire est proche.", domaines: [{i:"❤️",l:"Amour",s:"88"},{i:"💼",l:"Carrière",s:"95"},{i:"🌿",l:"Santé",s:"82"}], celebs: ["Barack Obama","Madonna","Jennifer Lopez","Chris Hemsworth","Kylie Jenner","Whitney Houston"] },
+  { nom: "Vierge", latin: "Virgo", glyph: "♍", debut: [8,23], fin: [9,22], element: "Terre", mode: "Mutable", planete: "Mercure", couleurA: "rgba(120,200,120,.28)", couleurB: "transparent", glow: "rgba(120,200,120,.4)", desc: "Sous la gouverne de Mercure, la Vierge est le signe de l'excellence, du discernement et du service. Votre esprit analytique d'une précision chirurgicale vous permet de voir ce que les autres manquent. Vous avez ce rare talent de transformer le chaos en ordre avec une efficacité désarmante. Perfectionniste dans l'âme, vous êtes mû par un désir profond de rendre le monde — et les personnes qui vous entourent — meilleurs.", positifs: ["Analytique","Méthodique","Altruiste","Modeste","Loyal","Précis","Fiable","Ingénieux"], negatifs: ["Perfectionniste","Critique","Anxieux","Rigide","Trop prudent"], qualites: [{l:"Précision",v:.96},{l:"Fiabilité",v:.92},{l:"Intelligence",v:.90},{l:"Dévouement",v:.88},{l:"Spontanéité",v:.35},{l:"Confiance",v:.58}], chanceux: {chiffres:"5, 14, 23", couleurs:"Beige, Vert forêt, Bleu marine", pierre:"Jade, Saphir", jour:"Mercredi", fleur:"Lavande, Myosotis"}, compat: ["Taureau","Capricorne","Cancer","Scorpion"], compatBest: ["Taureau","Capricorne"], compatDesc: "Solidité exemplaire avec la Terre. Attraction mystérieuse avec les Poissons.", horoscope: "Mercure favorise votre secteur professionnel et de santé. Vos efforts méticuleux portent enfin leurs fruits — reconnaissez votre propre valeur sans minimiser vos accomplissements. C'est le moment d'affiner vos routines quotidiennes et d'adopter des habitudes qui soutiennent votre bien-être sur le long terme. En amour, laissez tomber le masque du perfectionnisme : la vulnérabilité est une force.", domaines: [{i:"❤️",l:"Amour",s:"72"},{i:"💼",l:"Carrière",s:"95"},{i:"🌿",l:"Santé",s:"90"}], celebs: ["Beyoncé","Freddie Mercury","Michael Jackson","Amy Winehouse","Keanu Reeves","Mother Teresa"] },
+  { nom: "Balance", latin: "Libra", glyph: "♎", debut: [9,23], fin: [10,22], element: "Air", mode: "Cardinal", planete: "Vénus", couleurA: "rgba(200,120,200,.28)", couleurB: "transparent", glow: "rgba(200,120,200,.45)", desc: "Gouverné par Vénus, la Balance est le signe de l'harmonie, de la beauté et de la justice. Vous possédez un sens esthétique inné qui transcende tous les domaines de votre vie. Diplomate-né, vous avez ce don remarquable de voir tous les points de vue et de créer des ponts là où d'autres érigent des murs. Votre quête de l'équilibre parfait est à la fois votre plus grande force et votre plus grand défi.", positifs: ["Diplomate","Juste","Charmant","Raffiné","Sociable","Idéaliste","Élégant","Équitable"], negatifs: ["Indécis","Superficiel","Complaisant","Évite les conflits","Vaniteux"], qualites: [{l:"Diplomatie",v:.95},{l:"Charme",v:.92},{l:"Sens esthétique",v:.94},{l:"Sociabilité",v:.90},{l:"Décision",v:.35},{l:"Fermeté",v:.42}], chanceux: {chiffres:"6, 15, 24", couleurs:"Rose pâle, Bleu ciel, Ivoire", pierre:"Opale, Lapis-lazuli", jour:"Vendredi", fleur:"Rose, Pivoine"}, compat: ["Gémeaux","Verseau","Lion","Sagittaire"], compatBest: ["Gémeaux","Verseau"], compatDesc: "Légèreté et intelligence partagées avec l'Air. Tension créative avec le Bélier.", horoscope: "Vénus, votre planète maîtresse, traverse votre secteur des partenariats. Les relations — amoureuses, professionnelles, amicales — sont mises en lumière. C'est le moment de rééquilibrer les échanges et de nommer clairement vos besoins. Votre charme naturel ouvre des portes dans votre vie professionnelle. Faites confiance à votre sens de la beauté : un projet artistique vous révèlera à vous-même.", domaines: [{i:"❤️",l:"Amour",s:"92"},{i:"💼",l:"Carrière",s:"80"},{i:"🌿",l:"Santé",s:"75"}], celebs: ["Kim Kardashian","Eminem","Bruno Mars","Cardi B","Will Smith","Serena Williams"] },
+  { nom: "Scorpion", latin: "Scorpius", glyph: "♏", debut: [10,23], fin: [11,21], element: "Eau", mode: "Fixe", planete: "Pluton", couleurA: "rgba(150,50,180,.32)", couleurB: "transparent", glow: "rgba(150,50,180,.5)", desc: "Sous la tutelle de Pluton, planète des transformations profondes, le Scorpion est le signe le plus intense et le plus mystérieux du zodiaque. Vous plongez là où d'autres n'osent pas aller, percevant les vérités cachées derrière les apparences. Votre magnétisme est puissant et magnétique. Vous aimez profondément ou pas du tout — la demi-mesure n'existe pas dans votre univers. La mort et la renaissance sont vos cycles naturels.", positifs: ["Intense","Perspicace","Loyal","Courageux","Passionné","Magnétique","Déterminé","Transformateur"], negatifs: ["Jaloux","Rancunier","Manipulateur","Obsessionnel","Secret"], qualites: [{l:"Intensité",v:.98},{l:"Intuition",v:.95},{l:"Détermination",v:.92},{l:"Passion",v:.96},{l:"Confiance",v:.45},{l:"Légèreté",v:.28}], chanceux: {chiffres:"8, 11, 18", couleurs:"Bordeaux, Noir, Pourpre", pierre:"Obsidienne, Grenat", jour:"Mardi", fleur:"Chrysanthème, Chardon noir"}, compat: ["Cancer","Poissons","Vierge","Capricorne"], compatBest: ["Cancer","Poissons"], compatDesc: "Fusion intense avec l'Eau. Alchimie de pouvoir avec le Taureau.", horoscope: "Pluton amplifie votre pouvoir de transformation. Une renaissance personnelle profonde est en cours — laissez partir ce qui ne vous sert plus avec confiance. Votre perspicacité légendaire vous guide vers des vérités que d'autres ignorent. En amour, une connexion d'âme rare est possible si vous acceptez de baisser la garde. Financièrement, votre instinct pour les ressources cachées est particulièrement fiable.", domaines: [{i:"❤️",l:"Amour",s:"95"},{i:"💼",l:"Carrière",s:"88"},{i:"🌿",l:"Santé",s:"78"}], celebs: ["Leonardo DiCaprio","Drake","Katy Perry","Ryan Gosling","SZA","Pablo Picasso"] },
+  { nom: "Sagittaire", latin: "Sagittarius", glyph: "♐", debut: [11,22], fin: [12,21], element: "Feu", mode: "Mutable", planete: "Jupiter", couleurA: "rgba(220,130,50,.3)", couleurB: "transparent", glow: "rgba(220,130,50,.45)", desc: "Gouverné par Jupiter, le plus grand des dieux, le Sagittaire est l'éternel explorateur du zodiaque. Vous êtes animé par une soif insatiable de liberté, de savoir et d'horizons nouveaux. Votre optimisme est contagieux et votre philosophie de vie généreuse inspire ceux qui vous entourent. Archer céleste, vous visez toujours haut — votre flèche est souvent dirigée vers des idéaux qui dépassent le commun des mortels.", positifs: ["Optimiste","Aventurier","Philosophe","Généreux","Honnête","Enthousiaste","Jovial","Visionnaire"], negatifs: ["Imprudent","Excessif","Irresponsable","Trop direct","Instable"], qualites: [{l:"Optimisme",v:.96},{l:"Aventure",v:.94},{l:"Générosité",v:.88},{l:"Sagesse",v:.80},{l:"Constance",v:.45},{l:"Tact",v:.50}], chanceux: {chiffres:"3, 9, 21", couleurs:"Violet, Turquoise, Bleu royal", pierre:"Turquoise, Améthyste", jour:"Jeudi", fleur:"Œillet, Ancolie"}, compat: ["Bélier","Lion","Balance","Verseau"], compatBest: ["Bélier","Lion"], compatDesc: "Flamme partagée avec le Feu. Curiosité mutuelle avec les Gémeaux.", horoscope: "Jupiter, votre planète maîtresse, vous ouvre les portes du monde. Les opportunités de voyage, d'apprentissage et d'expansion professionnelle se multiplient. Votre foi naturelle en la vie attire des synchronicités remarquables — restez ouvert aux signes. En amour, votre liberté est précieuse mais une relation profonde demande aussi de l'ancrage. Osez vous engager sans perdre votre espace.", domaines: [{i:"❤️",l:"Amour",s:"80"},{i:"💼",l:"Carrière",s:"88"},{i:"🌿",l:"Santé",s:"85"}], celebs: ["Jay-Z","Taylor Swift","Brad Pitt","Nicki Minaj","Walt Disney","Miley Cyrus"] },
+  { nom: "Capricorne", latin: "Capricornus", glyph: "♑", debut: [12,22], fin: [1,19], element: "Terre", mode: "Cardinal", planete: "Saturne", couleurA: "rgba(80,100,140,.3)", couleurB: "transparent", glow: "rgba(80,100,140,.42)", desc: "Sous la gouverne de Saturne, planète de la discipline et du temps, le Capricorne est le signe de l'ambition patiente et de la réussite méritée. Vous gravissez la montagne de la vie méthodiquement, posant chaque pied avec précision. Votre discipline est légendaire, votre sens des responsabilités profond, et votre capacité à différer la gratification en fait un bâtisseur d'empire hors pair. Le succès est inévitable pour vous.", positifs: ["Ambitieux","Discipliné","Responsable","Patient","Pragmatique","Loyal","Stratège","Persévérant"], negatifs: ["Rigide","Pessimiste","Froid","Trop sérieux","Calculateur"], qualites: [{l:"Ambition",v:.95},{l:"Discipline",v:.94},{l:"Fiabilité",v:.92},{l:"Stratégie",v:.90},{l:"Spontanéité",v:.28},{l:"Légèreté",v:.32}], chanceux: {chiffres:"4, 8, 13", couleurs:"Gris, Brun, Noir", pierre:"Onyx, Grenat", jour:"Samedi", fleur:"Poinsettia, Lierre"}, compat: ["Taureau","Vierge","Scorpion","Poissons"], compatBest: ["Taureau","Vierge"], compatDesc: "Solidité et ambition partagées avec la Terre. Axe de pouvoir avec le Cancer.", horoscope: "Saturne vous récompense de vos efforts passés. Une reconnaissance professionnelle ou une consolidation financière importante est à l'horizon. Votre structure intérieure est votre plus grande richesse — partagez-la avec vos proches plutôt que de la garder pour vos ambitions seules. En amour, laisser entrer l'imprévu sans perdre votre ancrage est le défi — et la récompense — de ce cycle.", domaines: [{i:"❤️",l:"Amour",s:"70"},{i:"💼",l:"Carrière",s:"98"},{i:"🌿",l:"Santé",s:"80"}], celebs: ["Denzel Washington","Michelle Obama","LeBron James","Timothée Chalamet","Dolly Parton","David Bowie"] },
+  { nom: "Verseau", latin: "Aquarius", glyph: "♒", debut: [1,20], fin: [2,18], element: "Air", mode: "Fixe", planete: "Uranus", couleurA: "rgba(60,150,220,.3)", couleurB: "transparent", glow: "rgba(60,150,220,.45)", desc: "Gouverné par Uranus, planète de la révolution et de l'innovation, le Verseau est en avance sur son époque. Esprit libre et visionnaire, vous portez en vous les idées qui changeront demain le monde. Votre amour de l'humanité est sincère et universel, et votre besoin d'indépendance intellectuelle est constitutif de votre identité. Vous êtes l'électron libre du zodiaque : imprévisible, brillant, unique.", positifs: ["Visionnaire","Humaniste","Original","Indépendant","Inventif","Altruiste","Ouvert d'esprit","Progressiste"], negatifs: ["Distant","Excentrique","Imprévisible","Détaché","Rebelle"], qualites: [{l:"Innovation",v:.96},{l:"Humanisme",v:.90},{l:"Intelligence",v:.94},{l:"Originalité",v:.95},{l:"Chaleur",v:.55},{l:"Conventionalité",v:.18}], chanceux: {chiffres:"4, 7, 11", couleurs:"Bleu électrique, Turquoise, Violet", pierre:"Améthyste, Aigue-marine", jour:"Samedi", fleur:"Orchidée, Pissenlit"}, compat: ["Gémeaux","Balance","Bélier","Sagittaire"], compatBest: ["Gémeaux","Balance"], compatDesc: "Connexion intellectuelle parfaite avec l'Air. Magnétisme révolutionnaire avec le Lion.", horoscope: "Uranus active votre secteur de l'identité et des aspirations. Une révolution intérieure se prépare — vos idées les plus folles méritent maintenant d'être partagées. Votre réseau joue un rôle clé : entourez-vous de personnes qui partagent votre vision du futur. En amour, une rencontre ou une révélation inattendue peut transformer radicalement votre vision de ce que vous souhaitez vraiment.", domaines: [{i:"❤️",l:"Amour",s:"78"},{i:"💼",l:"Carrière",s:"90"},{i:"🌿",l:"Santé",s:"82"}], celebs: ["Harry Styles","The Weeknd","Shakira","Bob Marley","Ellen DeGeneres","Oprah Winfrey"] },
+  { nom: "Poissons", latin: "Pisces", glyph: "♓", debut: [2,19], fin: [3,20], element: "Eau", mode: "Mutable", planete: "Neptune", couleurA: "rgba(80,120,200,.3)", couleurB: "transparent", glow: "rgba(80,120,200,.45)", desc: "Dernier signe du zodiaque, gouverné par Neptune, planète des rêves et des illusions, les Poissons portent en eux l'écho de tous les signes. Votre sensibilité est d'une profondeur océanique, votre empathie quasiment mystique. Vous habitez une frontière entre le visible et l'invisible, le réel et le rêvé. Artistes, guérisseurs, mystiques — les Poissons transcendent les catégories et s'épanouissent dans tout ce qui touche à l'âme.", positifs: ["Empathique","Intuitif","Créatif","Rêveur","Altruiste","Sensible","Spirituel","Inspirant"], negatifs: ["Trop sensible","Naïf","Évasif","Dépendant","Idéaliste à l'excès"], qualites: [{l:"Empathie",v:.98},{l:"Créativité",v:.95},{l:"Intuition",v:.94},{l:"Spiritualité",v:.92},{l:"Pragmatisme",v:.30},{l:"Limites",v:.32}], chanceux: {chiffres:"7, 12, 29", couleurs:"Bleu mer, Violet, Vert d'eau", pierre:"Aigue-marine, Améthyste", jour:"Jeudi", fleur:"Nénuphar, Glycine"}, compat: ["Cancer","Scorpion","Taureau","Capricorne"], compatBest: ["Cancer","Scorpion"], compatDesc: "Fusion d'âmes avec l'Eau. Ancrage précieux avec la Terre. Tension avec la Vierge.", horoscope: "Neptune éclaire votre vie intérieure d'une lumière douce et révélatrice. Un projet créatif ou spirituel prend une dimension nouvelle — suivez cette voie avec confiance. Votre sensibilité est votre superpouvoir en ce moment : elle attire des connexions authentiques et profondes. En amour, vous rencontrerez ou approfondirez une relation d'une intensité rare. Protégez également votre énergie des vampires émotionnels.", domaines: [{i:"❤️",l:"Amour",s:"95"},{i:"💼",l:"Carrière",s:"75"},{i:"🌿",l:"Santé",s:"72"}], celebs: ["Rihanna","Justin Bieber","Steve Jobs","Albert Einstein","Kurt Cobain","Lupita Nyong'o"] }
+];
+
+const MOIS_NOMS = ["","Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"];
+const MOIS_COURTS = ["","Jan","Fév","Mar","Avr","Mai","Jun","Jul","Aoû","Sep","Oct","Nov","Déc"];
+
+(function initForm() {
+  const dayEl = document.getElementById('selectDay');
+  const monEl = document.getElementById('selectMonth');
+  for (let d = 1; d <= 31; d++) dayEl.innerHTML += `<option value="${d}">${d}</option>`;
+  MOIS_NOMS.slice(1).forEach((m, i) => monEl.innerHTML += `<option value="${i+1}">${m}</option>`);
+  const now = new Date();
+  dayEl.value = now.getDate();
+  monEl.value = now.getMonth() + 1;
+  document.getElementById('inputYear').value = now.getFullYear() - 25;
+})();
+
+function getSign(day, month) {
+  for (const s of SIGNES) {
+    const [dm, dd] = s.debut;
+    const [fm, fd] = s.fin;
+    if (s.nom === "Capricorne") {
+      if ((month === 12 && day >= 22) || (month === 1 && day <= 19)) return s;
+      continue;
+    }
+    if ((month === dm && day >= dd) || (month === fm && day <= fd)) return s;
+  }
+  return null;
 }
 
-function findSign(){
-let v=document.getElementById("birthdate").value;
-if(!v) return alert("Choisissez une date.");
-let dt=new Date(v);
-let sname=zodiac(dt.getMonth()+1,dt.getDate());
-let s=signs[sname];
-
-for(let k of ["element","planet","qualities","weaknesses","flaws","compatibility","stone","color","quote"])
-document.getElementById(k).textContent=s[k];
-
-document.getElementById("icon").textContent=s.icon;
-document.getElementById("sign").textContent=sname;
-document.getElementById("result").style.display="block";
-
-let luck=Math.floor(Math.random()*61)+40;
-document.getElementById("luck").style.width=luck+"%";
+function showFormError(msg) {
+  const el = document.getElementById('formError');
+  el.textContent = msg;
+  el.classList.add('visible');
 }
+
+function hideFormError() {
+  const el = document.getElementById('formError');
+  el.textContent = '';
+  el.classList.remove('visible');
+}
+
+function revealSign() {
+  hideFormError();
+  const day   = parseInt(document.getElementById('selectDay').value, 10);
+  const month = parseInt(document.getElementById('selectMonth').value, 10);
+  const year  = parseInt(document.getElementById('inputYear').value, 10) || 1990;
+
+  if (!day || !month || year < 1900 || year > 2026) {
+    showFormError("Veuillez entrer une date de naissance valide.");
+    return;
+  }
+
+  const sign = getSign(day, month);
+  if (!sign) {
+    showFormError("Date invalide, veuillez vérifier votre saisie.");
+    return;
+  }
+
+  const btn = document.querySelector('.btn-reveal');
+  btn.textContent = '✦ Les étoiles s\'alignent…';
+  btn.disabled = true;
+
+  setTimeout(() => {
+    btn.textContent = '✦ Révéler mon profil astral';
+    btn.disabled = false;
+    renderResult(sign, day, month, year);
+  }, 800);
+}
+
+function renderResult(s, day, month, year) {
+  document.getElementById('signGlyph').textContent = s.glyph;
+  document.getElementById('signName').textContent  = s.nom;
+  document.getElementById('signDates').textContent = `${padDate(s.debut[1])} ${monthName(s.debut[0])} — ${padDate(s.fin[1])} ${monthName(s.fin[0])}`;
+  document.getElementById('signBirth').textContent = `Né(e) le ${day} ${MOIS_NOMS[month]} ${year}`;
+  document.getElementById('signLatin').textContent = s.latin;
+  document.getElementById('signBannerBg').style.cssText = `--sign-color-a:${s.couleurA};--sign-color-b:${s.couleurB};background:radial-gradient(ellipse 80% 70% at 50% 50%,${s.couleurA},${s.couleurB})`;
+  document.getElementById('signGlyph').style.filter = `drop-shadow(0 0 30px ${s.glow})`;
+
+  const elemClass = {Feu:'badge-feu',Terre:'badge-terre',Air:'badge-air',Eau:'badge-eau'}[s.element] || 'badge-planete';
+  const elemIcon = {Feu:'🔥',Terre:'🌱',Air:'💨',Eau:'🌊'}[s.element] || '✦';
+  document.getElementById('signBadges').innerHTML = `
+    <span class="badge ${elemClass}">${elemIcon} ${s.element}</span>
+    <span class="badge badge-planete">🪐 ${s.planete}</span>
+    <span class="badge badge-mode">◈ ${s.mode}</span>
+  `;
+
+  document.getElementById('signDesc').textContent = s.desc;
+  document.getElementById('traitPos').innerHTML = s.positifs.map(t => `<span class="trait">${t}</span>`).join('');
+  document.getElementById('traitNeg').innerHTML = s.negatifs.map(t => `<span class="trait negatif">${t}</span>`).join('');
+
+  document.getElementById('qualityBars').innerHTML = s.qualites.map(q => `
+    <div class="quality-row">
+      <span class="quality-label">${q.l}</span>
+      <div class="quality-bar"><div class="quality-fill" data-value="${q.v}"></div></div>
+      <span style="font-size:.78rem;color:var(--muted);width:36px;text-align:right;">${Math.round(q.v*100)}%</span>
+    </div>`).join('');
+
+  document.getElementById('luckyGrid').innerHTML = `
+    <div class="lucky-item"><div class="lucky-key">🔢 Chiffres</div><div class="lucky-val">${s.chanceux.chiffres}</div></div>
+    <div class="lucky-item"><div class="lucky-key">🎨 Couleurs</div><div class="lucky-val">${s.chanceux.couleurs}</div></div>
+    <div class="lucky-item"><div class="lucky-key">💎 Pierre</div><div class="lucky-val">${s.chanceux.pierre}</div></div>
+    <div class="lucky-item"><div class="lucky-key">📅 Jour</div><div class="lucky-val">${s.chanceux.jour}</div></div>
+  `;
+
+  document.getElementById('compatDesc').textContent = s.compatDesc;
+  document.getElementById('compatList').innerHTML = s.compat.map(nom => {
+    const sg = SIGNES.find(x => x.nom === nom);
+    const isBest = s.compatBest.includes(nom);
+    return `<div class="compat-item ${isBest?'best':''}"><span class="compat-glyph">${sg ? sg.glyph : '?'}</span><span>${nom}</span>${isBest ? '<span style="font-size:.6rem;color:var(--or)">★ Meilleur</span>' : ''}</div>`;
+  }).join('');
+
+  document.getElementById('horoscopeText').textContent = s.horoscope;
+  document.getElementById('horoscopeDomains').innerHTML = s.domaines.map(d => `
+    <div class="domain">
+      <span class="domain-icon">${d.i}</span>
+      <div class="domain-label">${d.l}</div>
+      <div class="domain-score">${d.s}/100</div>
+    </div>`).join('');
+
+  document.getElementById('celebList').innerHTML = s.celebs.map(c => `
+    <span style="padding:.4rem .9rem;border-radius:99px;background:rgba(123,79,224,.1);border:1px solid rgba(123,79,224,.2);font-size:.8rem;color:var(--violet-vif);">${c}</span>
+  `).join('');
+
+  document.getElementById('home-page').style.display = 'none';
+  document.getElementById('result').style.display = 'block';
+  window.scrollTo({top: 0, behavior: 'smooth'});
+
+  setTimeout(() => {
+    document.querySelectorAll('.quality-fill').forEach(el => {
+      el.style.transform = `scaleX(${el.dataset.value})`;
+    });
+  }, 400);
+}
+
+function renderWheel() {
+  document.getElementById('zodiacWheel').innerHTML = SIGNES.map((s, i) => `
+    <button type="button" class="zodiac-card" onclick="renderResult(SIGNES[${i}], ${s.debut[1]}, ${s.debut[0]}, 1990)" aria-label="Voir le profil ${s.nom}">
+      <span class="zodiac-card-glyph" style="filter:drop-shadow(0 0 8px ${s.glow})">${s.glyph}</span>
+      <span class="zodiac-card-name">${s.nom}</span>
+      <span class="zodiac-card-dates">${padDate(s.debut[1])} ${monthName(s.debut[0])} — ${padDate(s.fin[1])} ${monthName(s.fin[0])}</span>
+    </button>`).join('');
+
+  document.getElementById('footerSigns').innerHTML = SIGNES.map((s, i) =>
+    `<button type="button" class="footer-sign" title="${s.nom}" aria-label="${s.nom}" onclick="renderResult(SIGNES[${i}],${s.debut[1]},${s.debut[0]},1990)">${s.glyph}</button>`
+  ).join('');
+}
+
+function showHome() {
+  document.getElementById('home-page').style.display = 'block';
+  document.getElementById('result').style.display    = 'none';
+  hideFormError();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function padDate(d) { return d < 10 ? '0'+d : ''+d; }
+function monthName(m) { return MOIS_COURTS[m]; }
+
+renderWheel();
 </script>
 </body>
 </html>
